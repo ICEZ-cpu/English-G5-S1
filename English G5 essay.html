@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade 5 English SA1 Summary Exercise - Interactive Quiz</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Google Font: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        /* Custom scrollbar for section pills on mobile */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* Smooth underline styling for Section IV target words */
+        .target-underline {
+            text-decoration: underline;
+            text-decoration-thickness: 2.5px;
+            text-underline-offset: 4px;
+            text-decoration-color: #4f46e5;
+            font-weight: 700;
+            color: #312e81;
+            background-color: #eef2ff;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 text-slate-900 selection:bg-indigo-100 selection:text-indigo-900">
+
+    <!-- Sticky Top Header & Progress Bar -->
+    <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <!-- Title & Subtitle -->
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800">
+                            GRADE 5 ENGLISH
+                        </span>
+                        <span class="text-xs font-medium text-slate-500">SA1 Summary Exercise</span>
+                    </div>
+                    <h1 class="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight mt-0.5">
+                        Unit 3–5 Essay &amp; Sentence Writing Quiz
+                    </h1>
+                </div>
+
+                <!-- Controls: Instant Check Toggle & Live Counter -->
+                <div class="flex items-center justify-between sm:justify-end gap-4">
+                    <!-- Instant Feedback Toggle -->
+                    <label class="inline-flex items-center cursor-pointer select-none bg-slate-100 hover:bg-slate-200/70 transition-colors px-3 py-1.5 rounded-xl border border-slate-200">
+                        <input type="checkbox" id="instantFeedbackToggle" class="sr-only peer">
+                        <div class="relative w-9 h-5 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                        <span class="ms-2 text-xs font-semibold text-slate-700">Show Check Buttons</span>
+                    </label>
+
+                    <!-- Answered Counter Badge -->
+                    <div class="text-right">
+                        <div class="text-xs font-medium text-slate-500">Answered</div>
+                        <div class="text-sm font-bold text-indigo-600" id="progressText">0 / 45</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Visual Progress Bar -->
+            <div class="w-full bg-slate-200 rounded-full h-2 mt-3 overflow-hidden">
+                <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300 ease-out" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Section Filter Navigation Bar -->
+        <div class="bg-slate-50/90 border-t border-slate-200/80">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 py-2 flex items-center gap-2 overflow-x-auto no-scrollbar" id="sectionTabs">
+                <!-- Populated dynamically via JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 sm:py-8">
+
+        <!-- Score Summary & Results Dashboard (Hidden until submitted) -->
+        <section id="resultsDashboard" class="hidden mb-8 bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
+            <div class="bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-700 px-6 py-6 sm:px-8 sm:py-8 text-white">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/20 text-white mb-2">
+                            Quiz Completed
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight" id="scoreHeadline">Great Job!</h2>
+                        <p class="text-indigo-100 text-sm sm:text-base mt-1" id="scoreSubtext">
+                            Here is your complete performance breakdown across all 6 sections.
+                        </p>
+                    </div>
+
+                    <!-- Big Score Card -->
+                    <div class="flex items-center gap-5 bg-white/15 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-white/20 shrink-0">
+                        <div class="text-center">
+                            <div class="text-xs uppercase tracking-wider text-indigo-100 font-semibold">Total Score</div>
+                            <div class="text-3xl sm:text-4xl font-black mt-0.5" id="totalScoreDisplay">0 / 45</div>
+                        </div>
+                        <div class="h-12 w-px bg-white/25"></div>
+                        <div class="text-center">
+                            <div class="text-xs uppercase tracking-wider text-indigo-100 font-semibold">Percentage</div>
+                            <div class="text-3xl sm:text-4xl font-black mt-0.5" id="percentageDisplay">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section-by-Section Breakdown Grid -->
+            <div class="p-6 sm:p-8">
+                <h3 class="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4">Section-by-Section Breakdown</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="sectionBreakdownGrid">
+                    <!-- Populated dynamically via JS -->
+                </div>
+
+                <!-- Action Buttons inside Results -->
+                <div class="mt-6 pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <button type="button" id="filterIncorrectBtn" class="px-4 py-2.5 rounded-xl text-sm font-semibold bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200 transition-colors">
+                            Show Incorrect Only
+                        </button>
+                        <button type="button" id="showAllReviewBtn" class="hidden px-4 py-2.5 rounded-xl text-sm font-semibold bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200 transition-colors">
+                            Show All 45 Questions
+                        </button>
+                    </div>
+
+                    <button type="button" onclick="resetQuiz()" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                        </svg>
+                        Reset / Retake Quiz
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Custom Notification / Warning Banner (Replaces alert/confirm) -->
+        <div id="notificationBanner" class="hidden mb-6 rounded-2xl p-4 border shadow-sm transition-all">
+            <div class="flex items-start justify-between gap-4">
+                <div class="flex items-start gap-3">
+                    <div id="notificationIcon" class="mt-0.5 shrink-0"></div>
+                    <div>
+                        <h4 id="notificationTitle" class="text-sm font-bold"></h4>
+                        <p id="notificationMessage" class="text-sm mt-0.5"></p>
+                        <div id="notificationActions" class="mt-3 flex flex-wrap gap-2 hidden">
+                            <button type="button" id="confirmSubmitAnywayBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-600 text-white hover:bg-amber-700 transition-colors">
+                                Submit Anyway
+                            </button>
+                            <button type="button" id="jumpToUnansweredBtn" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-white text-amber-900 border border-amber-300 hover:bg-amber-50 transition-colors">
+                                Jump to First Unanswered
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="hideNotification()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <div id="questionsContainer" class="space-y-8">
+            <!-- Populated dynamically via JS -->
+        </div>
+
+        <!-- Bottom Submit & Reset Controls -->
+        <div class="mt-10 bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="text-center sm:text-left">
+                <p class="text-sm font-bold text-slate-800" id="bottomStatusTitle">Ready to check your score?</p>
+                <p class="text-xs text-slate-500 mt-0.5" id="bottomStatusSubtitle">Make sure you have answered all 45 questions before submitting.</p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 w-full sm:w-auto">
+                <button type="button" onclick="resetQuiz()" class="w-full sm:w-auto px-5 py-3 rounded-xl text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-colors">
+                    Reset Quiz
+                </button>
+                <button type="button" id="submitQuizBtn" onclick="attemptSubmitQuiz()" class="w-full sm:w-auto px-7 py-3 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md shadow-indigo-200 transition-all">
+                    Submit &amp; Calculate Score
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 py-5 mt-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center text-xs text-slate-500">
+            Grade 5 English • SA1 Summary Exercise (Unit 3–5 Review) • 45 Questions Interactive Practice
+        </div>
+    </footer>
+
+    <!-- Application Logic & Complete Question Bank -->
+    <script>
+        /**
+         * Complete Section Metadata for Grade 5 English SA1 Summary Exercise
+         */
+        const SECTIONS = [
+            {
+                id: 'sec-1',
+                shortTitle: 'I. Vocabulary',
+                title: 'Section I: Complete the sentences by using the correct vocabularies',
+                subtitle: 'Type the correct vocabulary word or phrase into each blank.',
+                range: [1, 20]
+            },
+            {
+                id: 'sec-2',
+                shortTitle: 'II. Present Simple',
+                title: 'Section II: Fill in each blank using present simple for future events',
+                subtitle: 'Type the correct present simple form of the verb in parentheses.',
+                range: [21, 25]
+            },
+            {
+                id: 'sec-3',
+                shortTitle: 'III. Pres. Perf. Prog.',
+                title: 'Section III: Write sentences using the present perfect progressive and "for" or "since"',
+                subtitle: 'Rewrite or combine each prompt into a complete present perfect progressive sentence using "for" or "since".',
+                range: [26, 30]
+            },
+            {
+                id: 'sec-4',
+                shortTitle: 'IV. Wh- Questions',
+                title: 'Section IV: Write questions about the underlined words',
+                subtitle: 'Write a complete Wh- question asking about the underlined word or phrase.',
+                range: [31, 35]
+            },
+            {
+                id: 'sec-5',
+                shortTitle: 'V. Wishes',
+                title: 'Section V: Complete the sentences with the correct forms of the verbs in parentheses',
+                subtitle: 'Type the correct subjunctive / past form of the verb in parentheses.',
+                range: [36, 40]
+            },
+            {
+                id: 'sec-6',
+                shortTitle: 'VI. Passive Voice',
+                title: 'Section VI: Fill in each blank using present simple passive',
+                subtitle: 'Type the correct present simple passive verb form into each blank.',
+                range: [41, 45]
+            }
+        ];
+
+        /**
+         * Complete 45-Question Essay & Fill-in-the-Blank Question Bank
+         * Supports inline blanks (single or multiple) and full-sentence writing prompts.
+         */
+        const QUESTIONS = [
+            // Section I: Complete the sentences by using the correct vocabularies (1–20)
+            { id: 1, section: 'sec-1', type: 'blank', parts: ['The ', ' in the movie were so cool! They made it seem like dinosaurs were really alive.'], answers: [['special effects']], displayAnswer: 'special effects', placeholder: 'vocabulary...' },
+            { id: 2, section: 'sec-1', type: 'blank', parts: ['The ', ' was so strong it blew the roof off the house.'], answers: [['hurricane']], displayAnswer: 'hurricane', placeholder: 'vocabulary...' },
+            { id: 3, section: 'sec-1', type: 'blank', parts: ['The gymnast did amazing ', ' on the rings.'], answers: [['acrobatics']], displayAnswer: 'acrobatics', placeholder: 'vocabulary...' },
+            { id: 4, section: 'sec-1', type: 'blank', parts: ['We saw a big ', ' on the volcano when we visited the science museum.'], answers: [['model']], displayAnswer: 'model', placeholder: 'vocabulary...' },
+            { id: 5, section: 'sec-1', type: 'blank', parts: ['We found some old toys in the ', '.'], answers: [['attic']], displayAnswer: 'attic', placeholder: 'vocabulary...' },
+            { id: 6, section: 'sec-1', type: 'blank', parts: ['After the storm, there was a lot of ', ' like broken branches on the road.'], answers: [['debris']], displayAnswer: 'debris', placeholder: 'vocabulary...' },
+            { id: 7, section: 'sec-1', type: 'blank', parts: ['The car was parked in the ', ' outside our house.'], answers: [['driveway']], displayAnswer: 'driveway', placeholder: 'vocabulary...' },
+            { id: 8, section: 'sec-1', type: 'blank', parts: ['We used a ', ' to pour juice into a small bottle without spilling it.'], answers: [['funnel']], displayAnswer: 'funnel', placeholder: 'vocabulary...' },
+            { id: 9, section: 'sec-1', type: 'blank', parts: ['The ', ' in the room was too dim to read.'], answers: [['lighting']], displayAnswer: 'lighting', placeholder: 'vocabulary...' },
+            { id: 10, section: 'sec-1', type: 'blank', parts: ['The glass jar fell and began to ', ' into tiny pieces on the floor.'], answers: [['shatter']], displayAnswer: 'shatter', placeholder: 'vocabulary...' },
+            { id: 11, section: 'sec-1', type: 'blank', parts: ['The ', ' helps us break down food.'], answers: [['digestive system']], displayAnswer: 'digestive system', placeholder: 'vocabulary...' },
+            { id: 12, section: 'sec-1', type: 'blank', parts: ['The ', ' is a tube that helps us breathe.'], answers: [['windpipe']], displayAnswer: 'windpipe', placeholder: 'vocabulary...' },
+            { id: 13, section: 'sec-1', type: 'blank', parts: ['The ', ' help our body get rid of waste.'], answers: [['kidneys']], displayAnswer: 'kidneys', placeholder: 'vocabulary...' },
+            { id: 14, section: 'sec-1', type: 'blank', parts: ['The scientist studied the ', ' properties of the new substance.'], answers: [['chemical', 'chemicals']], displayAnswer: 'chemical / chemicals', placeholder: 'vocabulary...' },
+            { id: 15, section: 'sec-1', type: 'blank', parts: ['Running and swimming are examples of ', ' exercises.'], answers: [['aerobic']], displayAnswer: 'aerobic', placeholder: 'vocabulary...' },
+            { id: 16, section: 'sec-1', type: 'blank', parts: ['The heart is a natural ', ' that helps blood flow through our body.'], answers: [['pump']], displayAnswer: 'pump', placeholder: 'vocabulary...' },
+            { id: 17, section: 'sec-1', type: 'blank', parts: ['The ', ' tried to stop the other team from scoring a goal.'], answers: [['defender']], displayAnswer: 'defender', placeholder: 'vocabulary...' },
+            { id: 18, section: 'sec-1', type: 'blank', parts: ['The ', ' passed the ball to the striker.'], answers: [['midfielder']], displayAnswer: 'midfielder', placeholder: 'vocabulary...' },
+            { id: 19, section: 'sec-1', type: 'blank', parts: ['The referee called a ', ' on the player who pushed the other player.'], answers: [['foul']], displayAnswer: 'foul', placeholder: 'vocabulary...' },
+            { id: 20, section: 'sec-1', type: 'blank', parts: ['', ' are a good way to warm up before exercising.'], answers: [['jumping jacks']], displayAnswer: 'Jumping jacks', placeholder: 'vocabulary...' },
+
+            // Section II: Fill in each blank using present simple for future events (21–25)
+            { id: 21, section: 'sec-2', type: 'blank', parts: ['The school bus ', ' (arrive) in five minutes.'], answers: [['arrives']], displayAnswer: 'arrives', placeholder: 'verb form...' },
+            { id: 22, section: 'sec-2', type: 'blank', parts: ["The farmers' markets ", ' (start) their early hours at 6:00 a.m.'], answers: [['start']], displayAnswer: 'start', placeholder: 'verb form...' },
+            { id: 23, section: 'sec-2', type: 'blank', parts: ['When the clock strikes twelve, the new year ', ' (begin).'], answers: [['begins']], displayAnswer: 'begins', placeholder: 'verb form...' },
+            { id: 24, section: 'sec-2', type: 'blank', parts: ['The grocery stores ', ' (close) at 9:00 p.m. tonight.'], answers: [['close']], displayAnswer: 'close', placeholder: 'verb form...' },
+            { id: 25, section: 'sec-2', type: 'blank', parts: ['The last train to the city ', ' (leave) at 10:45 p.m. sharp.'], answers: [['leaves']], displayAnswer: 'leaves', placeholder: 'verb form...' },
+
+            // Section III: Write sentences using the present perfect progressive and "for" or "since" (26–30)
+            {
+                id: 26,
+                section: 'sec-3',
+                type: 'sentence',
+                prompt: 'The old car has been making that loud noise for a long time. It started last summer.',
+                answers: ['the old car has been making that loud noise since last summer'],
+                displayAnswer: 'The old car has been making that loud noise since last summer.',
+                placeholder: 'Write the complete sentence using "since" or "for"...'
+            },
+            {
+                id: 27,
+                section: 'sec-3',
+                type: 'sentence',
+                prompt: 'She began cooking dinner at 5 p.m. and is still in the kitchen.',
+                answers: [
+                    'she has been cooking dinner since 5 pm',
+                    'she has been cooking dinner since 500 pm',
+                    'she has been cooking dinner since 5 in the evening'
+                ],
+                displayAnswer: 'She has been cooking dinner since 5 p.m.',
+                placeholder: 'Write the complete sentence using "since" or "for"...'
+            },
+            {
+                id: 28,
+                section: 'sec-3',
+                type: 'sentence',
+                prompt: "We started cleaning the house early this morning. We're still cleaning.",
+                answers: ['we have been cleaning the house since early this morning'],
+                displayAnswer: 'We have been cleaning the house since early this morning.',
+                placeholder: 'Write the complete sentence using "since" or "for"...'
+            },
+            {
+                id: 29,
+                section: 'sec-3',
+                type: 'sentence',
+                prompt: "I started collecting stamps two years ago. I'm still adding to my collection.",
+                answers: [
+                    'i have been collecting stamps for two years',
+                    'i have been collecting stamps for 2 years'
+                ],
+                displayAnswer: 'I have been collecting stamps for two years.',
+                placeholder: 'Write the complete sentence using "since" or "for"...'
+            },
+            {
+                id: 30,
+                section: 'sec-3',
+                type: 'sentence',
+                prompt: "She started reading that novel last weekend and hasn't finished yet.",
+                answers: ['she has been reading that novel since last weekend'],
+                displayAnswer: 'She has been reading that novel since last weekend.',
+                placeholder: 'Write the complete sentence using "since" or "for"...'
+            },
+
+            // Section IV: Write questions about the underlined words (31–35)
+            {
+                id: 31,
+                section: 'sec-4',
+                type: 'sentence',
+                htmlPrompt: 'Dad expertly repaired <span class="target-underline">the car</span> yesterday.',
+                answers: ['what did dad expertly repair yesterday'],
+                displayAnswer: 'What did Dad expertly repair yesterday?',
+                placeholder: 'Write the Wh- question about the underlined words...'
+            },
+            {
+                id: 32,
+                section: 'sec-4',
+                type: 'sentence',
+                htmlPrompt: '<span class="target-underline">He</span> paid for the comic book with a ten-dollar bill.',
+                answers: [
+                    'who paid for the comic book with a ten dollar bill',
+                    'who paid for the comic book with a 10 dollar bill'
+                ],
+                displayAnswer: 'Who paid for the comic book with a ten-dollar bill?',
+                placeholder: 'Write the Wh- question about the underlined words...'
+            },
+            {
+                id: 33,
+                section: 'sec-4',
+                type: 'sentence',
+                htmlPrompt: '<span class="target-underline">The little puppy</span> slept soundly in its soft bed.',
+                answers: ['what slept soundly in its soft bed'],
+                displayAnswer: 'What slept soundly in its soft bed?',
+                placeholder: 'Write the Wh- question about the underlined words...'
+            },
+            {
+                id: 34,
+                section: 'sec-4',
+                type: 'sentence',
+                htmlPrompt: 'My best friend from camp won <span class="target-underline">the prize for the funniest costume</span>.',
+                answers: ['what did my best friend from camp win'],
+                displayAnswer: 'What did my best friend from camp win?',
+                placeholder: 'Write the Wh- question about the underlined words...'
+            },
+            {
+                id: 35,
+                section: 'sec-4',
+                type: 'sentence',
+                htmlPrompt: 'Tom discovered <span class="target-underline">a lost wallet</span> on the street.',
+                answers: ['what did tom discover on the street'],
+                displayAnswer: 'What did Tom discover on the street?',
+                placeholder: 'Write the Wh- question about the underlined words...'
+            },
+
+            // Section V: Complete the sentences with the correct forms of the verbs in parentheses (36–40)
+            { id: 36, section: 'sec-5', type: 'blank', parts: ['I wish my dog ', ' (not/bark) so much at night.'], answers: [["didn't bark", 'did not bark']], displayAnswer: "didn't bark / did not bark", placeholder: 'verb form...' },
+            { id: 37, section: 'sec-5', type: 'blank', parts: ['My friend wishes his bicycle ', ' (not/have) a flat tire today.'], answers: [["didn't have", 'did not have']], displayAnswer: "didn't have / did not have", placeholder: 'verb form...' },
+            { id: 38, section: 'sec-5', type: 'blank', parts: ['Lisa wishes she ', ' (can/see) her friends more often.'], answers: [['could see']], displayAnswer: 'could see', placeholder: 'verb form...' },
+            { id: 39, section: 'sec-5', type: 'blank', parts: ['I wish I ', ' (eat) healthier food every day.'], answers: [['ate']], displayAnswer: 'ate', placeholder: 'verb form...' },
+            { id: 40, section: 'sec-5', type: 'blank', parts: ['I wish I ', " (bring) my umbrella, because it's raining now."], answers: [['brought', 'had brought']], displayAnswer: 'brought / had brought', placeholder: 'verb form...' },
+
+            // Section VI: Fill in each blank using present simple passive (41–45)
+            { id: 41, section: 'sec-6', type: 'blank', parts: ['Students who arrive late ', ' (not allow) to enter the examination room without permission.'], answers: [['are not allowed', "aren't allowed"]], displayAnswer: "are not allowed / aren't allowed", placeholder: 'passive form...' },
+            { id: 42, section: 'sec-6', type: 'blank', parts: ['The results of the experiment ', ' (usually record) immediately after each test.'], answers: [['are usually recorded']], displayAnswer: 'are usually recorded', placeholder: 'passive form...' },
+            { id: 43, section: 'sec-6', type: 'blank', parts: ['The ancient manuscripts ', ' (keep) in a temperature-controlled room to prevent them from being damaged.'], answers: [['are kept']], displayAnswer: 'are kept', placeholder: 'passive form...' },
+            { id: 44, section: 'sec-6', type: 'blank', parts: ['The electricity used by the entire building ', ' (generate) by solar panels installed on the roof.'], answers: [['is generated']], displayAnswer: 'is generated', placeholder: 'passive form...' },
+            {
+                id: 45,
+                section: 'sec-6',
+                type: 'blank',
+                parts: ['What kind of materials ', ' commonly ', ' (use) to construct buildings in earthquake-prone areas?'],
+                answers: [['are'], ['used']],
+                displayAnswer: 'are ... used',
+                placeholder: 'be / V3'
+            }
+        ];
+
+        // Application State
+        let userAnswers = {};            // { [questionId]: string[] } (array of blank inputs, length 1 or 2)
+        let checkedQuestions = {};       // { [questionId]: boolean } (for per-question instant check)
+        let activeSectionFilter = 'all'; // 'all' or 'sec-1' .. 'sec-6'
+        let instantFeedback = false;
+        let isSubmitted = false;
+        let showOnlyIncorrect = false;
+
+        // DOM References
+        const questionsContainer = document.getElementById('questionsContainer');
+        const sectionTabs = document.getElementById('sectionTabs');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        const instantFeedbackToggle = document.getElementById('instantFeedbackToggle');
+        const resultsDashboard = document.getElementById('resultsDashboard');
+        const notificationBanner = document.getElementById('notificationBanner');
+
+        /**
+         * Normalize typed text for smart, student-friendly auto-grading:
+         * - Trims & lowercases
+         * - Standardizes curly apostrophes to straight apostrophes
+         * - Expands common English contractions ("didn't" -> "did not", "we're" -> "we are", etc.)
+         * - Removes punctuation (periods, question marks, commas, colons, hyphens)
+         * - Collapses multiple spaces
+         */
+        function normalizeText(raw) {
+            if (!raw) return '';
+            let s = String(raw)
+                .toLowerCase()
+                .trim()
+                .replace(/[\u2018\u2019\u201B\u2032]/g, "'")
+                .replace(/[\u201C\u201D]/g, '"');
+
+            // Normalize time variants like "5 p.m.", "5:00 pm", "5pm" -> "5 pm"
+            s = s.replace(/\b(\d{1,2}):00\s*p\.?m\.?\b/g, '$1 pm');
+            s = s.replace(/\b(\d{1,2})\s*p\.?m\.?\b/g, '$1 pm');
+            s = s.replace(/\b(\d{1,2}):00\s*a\.?m\.?\b/g, '$1 am');
+            s = s.replace(/\b(\d{1,2})\s*a\.?m\.?\b/g, '$1 am');
+
+            // Expand common contractions so both contracted and uncontracted forms match
+            const contractions = [
+                [/\bdidn't\b/g, 'did not'],
+                [/\bdoesn't\b/g, 'does not'],
+                [/\bdon't\b/g, 'do not'],
+                [/\baren't\b/g, 'are not'],
+                [/\bisn't\b/g, 'is not'],
+                [/\bwasn't\b/g, 'was not'],
+                [/\bweren't\b/g, 'were not'],
+                [/\bhasn't\b/g, 'has not'],
+                [/\bhaven't\b/g, 'have not'],
+                [/\bhadn't\b/g, 'had not'],
+                [/\bwon't\b/g, 'will not'],
+                [/\bcan't\b/g, 'cannot'],
+                [/\bcouldn't\b/g, 'could not'],
+                [/\bi'm\b/g, 'i am'],
+                [/\bwe're\b/g, 'we are'],
+                [/\bthey're\b/g, 'they are'],
+                [/\byou're\b/g, 'you are'],
+                [/\bshe's\b/g, 'she has'],
+                [/\bhe's\b/g, 'he has'],
+                [/\bi've\b/g, 'i have'],
+                [/\bwe've\b/g, 'we have'],
+                [/\bthey've\b/g, 'they have']
+            ];
+            for (const [pattern, replacement] of contractions) {
+                s = s.replace(pattern, replacement);
+            }
+
+            // Remove punctuation & hyphens, collapse spaces
+            s = s
+                .replace(/[-–—]/g, ' ')
+                .replace(/[.,?!:;"'()]/g, '')
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            return s;
+        }
+
+        /**
+         * Check whether a question has been answered (all required blanks non-empty)
+         */
+        function isQuestionAnswered(q) {
+            const vals = userAnswers[q.id];
+            if (!vals || !Array.isArray(vals)) return false;
+            const requiredCount = q.type === 'blank' ? q.answers.length : 1;
+            for (let i = 0; i < requiredCount; i++) {
+                if (!vals[i] || vals[i].trim() === '') return false;
+            }
+            return true;
+        }
+
+        /**
+         * Evaluate whether the student's typed answer(s) for question `q` are correct
+         */
+        function evaluateQuestion(q) {
+            const vals = userAnswers[q.id] || [];
+            if (q.type === 'blank') {
+                if (vals.length < q.answers.length) return false;
+                return q.answers.every((acceptedList, idx) => {
+                    const studentNorm = normalizeText(vals[idx] || '');
+                    if (!studentNorm) return false;
+                    return acceptedList.some(acc => normalizeText(acc) === studentNorm);
+                });
+            } else {
+                const studentNorm = normalizeText(vals[0] || '');
+                if (!studentNorm) return false;
+                return q.answers.some(acc => normalizeText(acc) === studentNorm);
+            }
+        }
+
+        /**
+         * Initialize the application on load
+         */
+        function init() {
+            try {
+                instantFeedbackToggle.addEventListener('change', (e) => {
+                    instantFeedback = e.target.checked;
+                    renderQuestions();
+                });
+
+                document.getElementById('filterIncorrectBtn').addEventListener('click', () => {
+                    showOnlyIncorrect = true;
+                    activeSectionFilter = 'all';
+                    document.getElementById('filterIncorrectBtn').classList.add('hidden');
+                    document.getElementById('showAllReviewBtn').classList.remove('hidden');
+                    renderSectionTabs();
+                    renderQuestions();
+                });
+
+                document.getElementById('showAllReviewBtn').addEventListener('click', () => {
+                    showOnlyIncorrect = false;
+                    document.getElementById('showAllReviewBtn').classList.add('hidden');
+                    document.getElementById('filterIncorrectBtn').classList.remove('hidden');
+                    renderSectionTabs();
+                    renderQuestions();
+                });
+
+                document.getElementById('confirmSubmitAnywayBtn').addEventListener('click', () => {
+                    hideNotification();
+                    finalizeSubmission();
+                });
+
+                document.getElementById('jumpToUnansweredBtn').addEventListener('click', () => {
+                    hideNotification();
+                    jumpToFirstUnanswered();
+                });
+
+                renderSectionTabs();
+                renderQuestions();
+                updateProgress();
+            } catch (err) {
+                console.error('Initialization error:', err);
+            }
+        }
+
+        /**
+         * Render horizontal section filter pills
+         */
+        function renderSectionTabs() {
+            const allCount = QUESTIONS.length;
+            const answeredAll = QUESTIONS.filter(q => isQuestionAnswered(q)).length;
+
+            let html = `
+                <button type="button"
+                    onclick="setSectionFilter('all')"
+                    class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+                        activeSectionFilter === 'all' && !showOnlyIncorrect
+                            ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                    }">
+                    All Questions (${answeredAll}/${allCount})
+                </button>
+            `;
+
+            SECTIONS.forEach((sec) => {
+                const secQuestions = QUESTIONS.filter(q => q.section === sec.id);
+                const secAnswered = secQuestions.filter(q => isQuestionAnswered(q)).length;
+                const isActive = activeSectionFilter === sec.id && !showOnlyIncorrect;
+
+                html += `
+                    <button type="button"
+                        onclick="setSectionFilter('${sec.id}')"
+                        class="shrink-0 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all border ${
+                            isActive
+                                ? 'bg-indigo-600 text-white border-indigo-600 shadow-sm'
+                                : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-100'
+                        }">
+                        ${sec.shortTitle} <span class="opacity-75 ml-1">(${secAnswered}/${secQuestions.length})</span>
+                    </button>
+                `;
+            });
+
+            sectionTabs.innerHTML = html;
+        }
+
+        /**
+         * Change active section filter
+         */
+        function setSectionFilter(secId) {
+            activeSectionFilter = secId;
+            showOnlyIncorrect = false;
+            if (isSubmitted) {
+                document.getElementById('showAllReviewBtn').classList.add('hidden');
+                document.getElementById('filterIncorrectBtn').classList.remove('hidden');
+            }
+            renderSectionTabs();
+            renderQuestions();
+        }
+
+        /**
+         * Render all visible sections and essay/fill-in-the-blank cards
+         */
+        function renderQuestions() {
+            const sectionsToRender = activeSectionFilter === 'all'
+                ? SECTIONS
+                : SECTIONS.filter(s => s.id === activeSectionFilter);
+
+            let html = '';
+            let renderedCount = 0;
+
+            sectionsToRender.forEach((section) => {
+                let secQuestions = QUESTIONS.filter(q => q.section === section.id);
+
+                if (isSubmitted && showOnlyIncorrect) {
+                    secQuestions = secQuestions.filter(q => !evaluateQuestion(q));
+                }
+
+                if (secQuestions.length === 0) return;
+                renderedCount += secQuestions.length;
+
+                html += `
+                    <div class="space-y-4" id="group-${section.id}">
+                        <!-- Section Header Banner -->
+                        <div class="bg-white border-l-4 border-indigo-600 rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200">
+                            <div class="flex flex-wrap items-center justify-between gap-2">
+                                <div>
+                                    <h2 class="text-base sm:text-lg font-extrabold text-slate-900">${section.title}</h2>
+                                    <p class="text-xs sm:text-sm text-slate-500 mt-0.5">${section.subtitle}</p>
+                                </div>
+                                <span class="text-xs font-bold px-3 py-1 rounded-full bg-slate-100 text-slate-600">
+                                    Questions ${section.range[0]}–${section.range[1]}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Question Cards -->
+                        <div class="space-y-4">
+                            ${secQuestions.map(q => buildQuestionCardHTML(q)).join('')}
+                        </div>
+                    </div>
+                `;
+            });
+
+            if (renderedCount === 0 && isSubmitted && showOnlyIncorrect) {
+                html = `
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-3">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-extrabold text-emerald-900">Perfect Score! No Incorrect Answers!</h3>
+                        <p class="text-sm text-emerald-700 mt-1">You answered every single question correctly.</p>
+                    </div>
+                `;
+            }
+
+            questionsContainer.innerHTML = html;
+        }
+
+        /**
+         * Build HTML for a single fill-in-the-blank or sentence-writing card
+         */
+        function buildQuestionCardHTML(q) {
+            const answered = isQuestionAnswered(q);
+            const showResult = isSubmitted || Boolean(checkedQuestions[q.id]);
+            const isCorrect = evaluateQuestion(q);
+            const vals = userAnswers[q.id] || [];
+
+            // Card border & header status badge
+            let cardBorderClass = 'border-slate-200';
+            let statusBadge = '';
+
+            if (showResult) {
+                if (isCorrect) {
+                    cardBorderClass = 'border-emerald-300 ring-1 ring-emerald-200';
+                    statusBadge = `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            Correct
+                        </span>
+                    `;
+                } else {
+                    cardBorderClass = 'border-rose-300 ring-1 ring-rose-200';
+                    statusBadge = `
+                        <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-100 text-rose-800">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                            ${answered ? 'Incorrect' : 'Unanswered'}
+                        </span>
+                    `;
+                }
+            } else if (answered) {
+                cardBorderClass = 'border-indigo-300';
+            }
+
+            const disabledAttr = isSubmitted ? 'disabled' : '';
+            let bodyHTML = '';
+
+            if (q.type === 'blank') {
+                // Build inline sentence with one or more text inputs
+                let inlineHTML = '';
+                q.parts.forEach((part, idx) => {
+                    inlineHTML += `<span>${escapeHTML(part)}</span>`;
+                    if (idx < q.answers.length) {
+                        const currentVal = vals[idx] || '';
+                        const singleBlankCorrect = showResult && q.answers[idx].some(acc => normalizeText(acc) === normalizeText(currentVal));
+
+                        let inputStyle = 'border-slate-300 bg-slate-50 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 text-slate-900';
+                        if (showResult) {
+                            inputStyle = singleBlankCorrect
+                                ? 'border-emerald-500 bg-emerald-50/70 text-emerald-950 font-bold'
+                                : 'border-rose-500 bg-rose-50/70 text-rose-950 font-bold';
+                        } else if (currentVal.trim() !== '') {
+                            inputStyle = 'border-indigo-400 bg-indigo-50/30 text-indigo-950 font-semibold';
+                        }
+
+                        const widthClass = q.answers.length > 1 ? 'w-28 sm:w-36' : 'w-44 sm:w-56';
+
+                        inlineHTML += `
+                            <input type="text"
+                                ${disabledAttr}
+                                value="${escapeAttr(currentVal)}"
+                                placeholder="${escapeAttr(q.placeholder || 'type answer...')}"
+                                oninput="handleTextInput(${q.id}, ${idx}, this.value)"
+                                onkeydown="handleInputKeydown(event, ${q.id})"
+                                autocomplete="off"
+                                spellcheck="false"
+                                aria-label="Question ${q.id} blank ${idx + 1}"
+                                class="inline-block mx-1 my-1 px-3 py-1.5 rounded-xl border-2 text-sm sm:text-base outline-none transition-all ${widthClass} ${inputStyle}"
+                            />
+                        `;
+                    }
+                });
+
+                bodyHTML = `
+                    <div class="text-base sm:text-lg font-medium text-slate-900 leading-relaxed">
+                        ${inlineHTML}
+                    </div>
+                `;
+            } else {
+                // Full-width sentence / question writing prompt (Sections III & IV)
+                const promptDisplay = q.htmlPrompt ? q.htmlPrompt : escapeHTML(q.prompt);
+                const currentVal = vals[0] || '';
+
+                let textareaStyle = 'border-slate-300 bg-slate-50 focus:bg-white focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 text-slate-900';
+                if (showResult) {
+                    textareaStyle = isCorrect
+                        ? 'border-emerald-500 bg-emerald-50/70 text-emerald-950 font-semibold'
+                        : 'border-rose-500 bg-rose-50/70 text-rose-950 font-semibold';
+                } else if (currentVal.trim() !== '') {
+                    textareaStyle = 'border-indigo-400 bg-indigo-50/30 text-indigo-950 font-medium';
+                }
+
+                bodyHTML = `
+                    <div class="space-y-3">
+                        <p class="text-base sm:text-lg font-semibold text-slate-900 leading-relaxed">
+                            ${promptDisplay}
+                        </p>
+                        <div>
+                            <input type="text"
+                                ${disabledAttr}
+                                value="${escapeAttr(currentVal)}"
+                                placeholder="${escapeAttr(q.placeholder || 'Write your complete sentence here...')}"
+                                oninput="handleTextInput(${q.id}, 0, this.value)"
+                                onkeydown="handleInputKeydown(event, ${q.id})"
+                                autocomplete="off"
+                                aria-label="Question ${q.id} sentence answer"
+                                class="w-full px-4 py-3 rounded-xl border-2 text-sm sm:text-base outline-none transition-all ${textareaStyle}"
+                            />
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Optional per-question "Check Answer" button when Instant Check mode is toggled on
+            let instantCheckBar = '';
+            if (!isSubmitted && instantFeedback) {
+                instantCheckBar = `
+                    <div class="mt-3 flex items-center justify-end">
+                        <button type="button"
+                            onclick="checkSingleQuestion(${q.id})"
+                            class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 transition-colors">
+                            Check Answer
+                        </button>
+                    </div>
+                `;
+            }
+
+            // Model answer feedback box shown after checking or submitting
+            let feedbackFooter = '';
+            if (showResult) {
+                const userFormatted = vals.filter(v => v && v.trim() !== '').join(' ... ');
+                if (isCorrect) {
+                    feedbackFooter = `
+                        <div class="mt-3.5 pt-3 border-t border-emerald-100 flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-emerald-800">
+                            <span class="font-semibold">Well done!</span>
+                            <span>Model Answer: <strong class="font-bold">${escapeHTML(q.displayAnswer)}</strong></span>
+                        </div>
+                    `;
+                } else {
+                    feedbackFooter = `
+                        <div class="mt-3.5 pt-3 border-t border-rose-100 bg-rose-50/60 rounded-xl px-3.5 py-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1.5 text-xs sm:text-sm">
+                            <span class="text-slate-600">
+                                Your answer: <strong class="text-rose-700">${userFormatted ? escapeHTML(userFormatted) : '(blank)'}</strong>
+                            </span>
+                            <span class="text-emerald-800">
+                                Correct answer: <strong class="font-bold text-emerald-700">${escapeHTML(q.displayAnswer)}</strong>
+                            </span>
+                        </div>
+                    `;
+                }
+            }
+
+            return `
+                <article id="question-card-${q.id}" class="bg-white rounded-2xl p-5 sm:p-6 shadow-sm border transition-all ${cardBorderClass}">
+                    <div class="flex items-start justify-between gap-3">
+                        <div class="flex items-start gap-3 w-full">
+                            <span class="inline-flex items-center justify-center w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 font-extrabold text-sm shrink-0 mt-0.5 border border-indigo-100">
+                                ${q.id}
+                            </span>
+                            <div class="w-full">
+                                ${bodyHTML}
+                            </div>
+                        </div>
+                        <div class="shrink-0">
+                            ${statusBadge}
+                        </div>
+                    </div>
+                    ${instantCheckBar}
+                    ${feedbackFooter}
+                </article>
+            `;
+        }
+
+        /**
+         * Handle typing into any text input without losing focus
+         */
+        function handleTextInput(questionId, blankIndex, value) {
+            if (isSubmitted) return;
+
+            if (!userAnswers[questionId]) {
+                userAnswers[questionId] = [];
+            }
+            userAnswers[questionId][blankIndex] = value;
+
+            // Clear prior per-question check state when student edits their answer
+            if (checkedQuestions[questionId]) {
+                delete checkedQuestions[questionId];
+                const q = QUESTIONS.find(item => item.id === questionId);
+                const cardEl = document.getElementById(`question-card-${questionId}`);
+                if (q && cardEl) {
+                    cardEl.outerHTML = buildQuestionCardHTML(q);
+                    const restoredInput = document.querySelectorAll(`#question-card-${questionId} input`)[blankIndex];
+                    if (restoredInput) {
+                        restoredInput.focus();
+                        restoredInput.setSelectionRange(value.length, value.length);
+                    }
+                }
+            } else {
+                // Update card border smoothly without re-rendering input DOM
+                const q = QUESTIONS.find(item => item.id === questionId);
+                const cardEl = document.getElementById(`question-card-${questionId}`);
+                if (q && cardEl) {
+                    if (isQuestionAnswered(q)) {
+                        cardEl.classList.remove('border-slate-200');
+                        cardEl.classList.add('border-indigo-300');
+                    } else {
+                        cardEl.classList.remove('border-indigo-300');
+                        cardEl.classList.add('border-slate-200');
+                    }
+                }
+            }
+
+            updateProgress();
+            renderSectionTabs();
+        }
+
+        /**
+         * Allow pressing Enter inside an input when Instant Check mode is active
+         */
+        function handleInputKeydown(event, questionId) {
+            if (event.key === 'Enter' && instantFeedback && !isSubmitted) {
+                event.preventDefault();
+                checkSingleQuestion(questionId);
+            }
+        }
+
+        /**
+         * Check and reveal feedback for a single question
+         */
+        function checkSingleQuestion(questionId) {
+            if (isSubmitted) return;
+            checkedQuestions[questionId] = true;
+            const q = QUESTIONS.find(item => item.id === questionId);
+            const cardEl = document.getElementById(`question-card-${questionId}`);
+            if (q && cardEl) {
+                cardEl.outerHTML = buildQuestionCardHTML(q);
+            }
+        }
+
+        /**
+         * Update top progress bar and counter
+         */
+        function updateProgress() {
+            const total = QUESTIONS.length;
+            const answered = QUESTIONS.filter(q => isQuestionAnswered(q)).length;
+            const pct = Math.round((answered / total) * 100);
+
+            progressText.textContent = `${answered} / ${total}`;
+            progressBar.style.width = `${pct}%`;
+
+            const bottomTitle = document.getElementById('bottomStatusTitle');
+            const bottomSub = document.getElementById('bottomStatusSubtitle');
+            if (!isSubmitted) {
+                if (answered === total) {
+                    bottomTitle.textContent = 'All 45 questions completed!';
+                    bottomSub.textContent = 'Click "Submit & Calculate Score" to view your final grade and model answers.';
+                } else {
+                    bottomTitle.textContent = `Progress: ${answered} of ${total} questions completed`;
+                    bottomSub.textContent = `${total - answered} question${total - answered === 1 ? '' : 's'} remaining.`;
+                }
+            }
+        }
+
+        /**
+         * Validate before submitting (warns if unanswered questions exist)
+         */
+        function attemptSubmitQuiz() {
+            if (isSubmitted) return;
+
+            const answeredCount = QUESTIONS.filter(q => isQuestionAnswered(q)).length;
+            const totalCount = QUESTIONS.length;
+
+            if (answeredCount < totalCount) {
+                const missing = totalCount - answeredCount;
+                showNotification(
+                    'warning',
+                    `You still have ${missing} unanswered question${missing === 1 ? '' : 's'}`,
+                    'Would you like to jump to the first unanswered question, or submit your quiz now anyway?',
+                    true
+                );
+                return;
+            }
+
+            finalizeSubmission();
+        }
+
+        /**
+         * Calculate score, lock inputs, and display results dashboard
+         */
+        function finalizeSubmission() {
+            isSubmitted = true;
+            hideNotification();
+
+            // Calculate overall score
+            let correctCount = 0;
+            QUESTIONS.forEach((q) => {
+                if (evaluateQuestion(q)) {
+                    correctCount++;
+                }
+            });
+
+            const total = QUESTIONS.length;
+            const percentage = Math.round((correctCount / total) * 100);
+
+            // Populate Results Header
+            document.getElementById('totalScoreDisplay').textContent = `${correctCount} / ${total}`;
+            document.getElementById('percentageDisplay').textContent = `${percentage}%`;
+
+            let headline = 'Keep Practicing!';
+            let subtext = 'Compare your typed answers with the model answers highlighted below.';
+            if (percentage >= 90) {
+                headline = 'Outstanding Work! 🌟';
+                subtext = 'You have mastered the Grade 5 Unit 3–5 vocabulary and grammar rules!';
+            } else if (percentage >= 75) {
+                headline = 'Great Job! 👏';
+                subtext = 'Solid performance! Check any missed answers below to aim for 100%.';
+            } else if (percentage >= 60) {
+                headline = 'Good Effort! 👍';
+                subtext = 'You are on the right track. Review the model answers below to strengthen weak spots.';
+            }
+
+            document.getElementById('scoreHeadline').textContent = headline;
+            document.getElementById('scoreSubtext').textContent = subtext;
+
+            // Populate Section Breakdown Cards
+            const breakdownHTML = SECTIONS.map((sec) => {
+                const secQs = QUESTIONS.filter(q => q.section === sec.id);
+                const secCorrect = secQs.filter(q => evaluateQuestion(q)).length;
+                const secPct = Math.round((secCorrect / secQs.length) * 100);
+
+                let barColor = 'bg-emerald-500';
+                let badgeColor = 'text-emerald-700 bg-emerald-50 border-emerald-200';
+                if (secPct < 60) {
+                    barColor = 'bg-rose-500';
+                    badgeColor = 'text-rose-700 bg-rose-50 border-rose-200';
+                } else if (secPct < 80) {
+                    barColor = 'bg-amber-500';
+                    badgeColor = 'text-amber-700 bg-amber-50 border-amber-200';
+                }
+
+                return `
+                    <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="text-xs font-bold text-slate-800">${sec.shortTitle}</span>
+                            <span class="text-xs font-extrabold px-2 py-0.5 rounded-md border ${badgeColor}">
+                                ${secCorrect}/${secQs.length} (${secPct}%)
+                            </span>
+                        </div>
+                        <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                            <div class="${barColor} h-2 rounded-full transition-all duration-500" style="width: ${secPct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('sectionBreakdownGrid').innerHTML = breakdownHTML;
+
+            // Show Dashboard & Update Bottom Controls
+            resultsDashboard.classList.remove('hidden');
+            const submitBtn = document.getElementById('submitQuizBtn');
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            submitBtn.textContent = 'Quiz Submitted';
+
+            document.getElementById('bottomStatusTitle').textContent = `Final Score: ${correctCount} / ${total} (${percentage}%)`;
+            document.getElementById('bottomStatusSubtitle').textContent = 'Scroll up to view your section breakdown or click Reset Quiz to try again.';
+
+            // Re-render all questions in review mode and scroll smoothly to top
+            activeSectionFilter = 'all';
+            showOnlyIncorrect = false;
+            renderSectionTabs();
+            renderQuestions();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /**
+         * Reset all state and restart the quiz cleanly
+         */
+        function resetQuiz() {
+            userAnswers = {};
+            checkedQuestions = {};
+            isSubmitted = false;
+            showOnlyIncorrect = false;
+            activeSectionFilter = 'all';
+
+            resultsDashboard.classList.add('hidden');
+            document.getElementById('showAllReviewBtn').classList.add('hidden');
+            document.getElementById('filterIncorrectBtn').classList.remove('hidden');
+
+            const submitBtn = document.getElementById('submitQuizBtn');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            submitBtn.textContent = 'Submit & Calculate Score';
+
+            hideNotification();
+            updateProgress();
+            renderSectionTabs();
+            renderQuestions();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /**
+         * Scroll to and focus the first unanswered question
+         */
+        function jumpToFirstUnanswered() {
+            const firstMissing = QUESTIONS.find(q => !isQuestionAnswered(q));
+            if (!firstMissing) return;
+
+            if (activeSectionFilter !== 'all' && activeSectionFilter !== firstMissing.section) {
+                activeSectionFilter = 'all';
+                renderSectionTabs();
+                renderQuestions();
+            }
+
+            setTimeout(() => {
+                const targetCard = document.getElementById(`question-card-${firstMissing.id}`);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    targetCard.classList.add('ring-2', 'ring-amber-400');
+                    const inputEl = targetCard.querySelector('input');
+                    if (inputEl) inputEl.focus();
+                    setTimeout(() => targetCard.classList.remove('ring-2', 'ring-amber-400'), 2000);
+                }
+            }, 50);
+        }
+
+        /**
+         * Show custom inline notification banner
+         */
+        function showNotification(type, title, message, showSubmitActions = false) {
+            const banner = document.getElementById('notificationBanner');
+            const titleEl = document.getElementById('notificationTitle');
+            const msgEl = document.getElementById('notificationMessage');
+            const iconEl = document.getElementById('notificationIcon');
+            const actionsEl = document.getElementById('notificationActions');
+
+            banner.className = 'mb-6 rounded-2xl p-4 border shadow-sm transition-all bg-amber-50 border-amber-300 text-amber-950';
+            iconEl.innerHTML = `
+                <svg class="w-5 h-5 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            `;
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            if (showSubmitActions) {
+                actionsEl.classList.remove('hidden');
+            } else {
+                actionsEl.classList.add('hidden');
+            }
+
+            banner.classList.remove('hidden');
+            banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        /**
+         * Hide custom notification banner
+         */
+        function hideNotification() {
+            notificationBanner.classList.add('hidden');
+        }
+
+        /**
+         * Escape HTML special characters safely
+         */
+        function escapeHTML(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        /**
+         * Escape HTML attribute values safely
+         */
+        function escapeAttr(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        // Start application once window loads
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
